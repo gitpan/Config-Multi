@@ -10,7 +10,7 @@ use Carp;
 
 use base qw/Class::Accessor/;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 __PACKAGE__->mk_accessors(qw/app_name prefix dir files extension/);
 
@@ -44,10 +44,15 @@ sub load {
 
     my $local_files = $self->_local_files;
     my $local = Config::Any->load_files( { files => $local_files } );
+    my $local_config = {} ;
     for ( @{$local} ) {
         my ( $filename, $data ) = %$_;
         push @files, $filename;
-        $config = { %{$config}, %{$data} };
+        $local_config->{$filename} = $data;
+    }
+
+    for (@{$local_files} ) {
+        $config = { %{$config}, %{ $local_config->{$_} } };
     }
 
     $self->{files} = \@files;

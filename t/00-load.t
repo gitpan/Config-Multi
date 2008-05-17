@@ -4,4 +4,4 @@ BEGIN {
 	use_ok( 'Config::Multi' );
 }
 
-diag( "Testing app $app::VERSION, Perl $], $^X" );
+diag( "Testing Config::Multi $Config::Multi::VERSION, Perl $], $^X" );

@@ -1,5 +1,9 @@
 Revision history for Config::Multi
 
+0.03    2008-05-17/23:07
+        - fix 00-load.t
+        - bug fix. 02-overwrite.t will pass all test now.
+
 0.02    2008-05-17/21:53
         - remove use FindBin::libs;
         - fix POD indent
