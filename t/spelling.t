@@ -26,7 +26,4 @@ MYAPP
 cli
 jobqueue
 myapp
-#     configration
-#     jobqueue
-#     myapp
-#     overwrited
+yaml

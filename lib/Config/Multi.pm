@@ -5,48 +5,49 @@ use warnings;
 use DirHandle;
 use File::Spec;
 use FindBin;
-use Config::Any ;
+use Config::Any;
 use Carp;
 
 use base qw/Class::Accessor/;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 __PACKAGE__->mk_accessors(qw/app_name prefix dir files extension/);
 
 sub load {
-    my $self = shift;
+    my $self  = shift;
     my @files = ();
     $self->{extension} ||= 'yml';
-    croak( 'you must set dir' ) unless $self->{dir};
-    croak( 'you must set app_name' ) unless $self->{app_name};
+    croak('you must set dir')      unless $self->{dir};
+    croak('you must set app_name') unless $self->{app_name};
 
     my $config = {};
 
-    my $app_files    = $self->_find_files( $self->{app_name} ) ;
+    my $app_files = $self->_find_files( $self->{app_name} );
     my $app = Config::Any->load_files( { files => $app_files } );
-    for ( @{$app} ){
-        my ($filename, $data) = %$_;
-        push @files , $filename;
-        $config = { %{$config}, %{$data} } ;
+    for ( @{$app} ) {
+        my ( $filename, $data ) = %$_;
+        push @files, $filename;
+        $config = { %{$config}, %{$data} };
     }
 
-    if( $self->{prefix} ) {
-        my $prefix_files = $self->_find_files( $self->{prefix} . '_' . $self->{app_name} );
-        my $prefix =  Config::Any->load_files( { files => $prefix_files } );
-        for ( @{$prefix} ){
-            my ($filename, $data) = %$_;
-            push @files , $filename;
-            $config = { %{$config}, %{$data} } ;
+    if ( $self->{prefix} ) {
+        my $prefix_files
+            = $self->_find_files( $self->{prefix} . '_' . $self->{app_name} );
+        my $prefix = Config::Any->load_files( { files => $prefix_files } );
+        for ( @{$prefix} ) {
+            my ( $filename, $data ) = %$_;
+            push @files, $filename;
+            $config = { %{$config}, %{$data} };
         }
     }
 
     my $local_files = $self->_local_files;
-    my $local =  Config::Any->load_files( { files => $local_files } );
-    for ( @{$local} ){
-        my ($filename, $data) = %$_;
-        push @files , $filename;
-        $config = { %{$config}, %{$data} } ;
+    my $local = Config::Any->load_files( { files => $local_files } );
+    for ( @{$local} ) {
+        my ( $filename, $data ) = %$_;
+        push @files, $filename;
+        $config = { %{$config}, %{$data} };
     }
 
     $self->{files} = \@files;
@@ -54,42 +55,53 @@ sub load {
     return $config;
 }
 
-
 sub _local_files {
-    my $self = shift;
-    my $env_app_key    = 'CONFIG_MULTI_' .uc($self->{app_name})  ;
-    my $env_prefix_key = 'CONFIG_MULTI_' . uc($self->{prefix}) . '_' . uc($self->{app_name})  ;
-    my @files = ();
-    my $app_lcoal    = $ENV{ $env_app_key } || File::Spec->catfile( $self->dir ,  $self->{app_name} . '_local.' . $self->extension ) ;
-    push @files  , $app_lcoal if -e $app_lcoal;
+    my $self        = shift;
+    my $env_app_key = 'CONFIG_MULTI_' . uc( $self->{app_name} );
+    my $env_prefix_key
+        = 'CONFIG_MULTI_'
+        . uc( $self->{prefix} ) . '_'
+        . uc( $self->{app_name} );
+    my @files     = ();
+    my $app_lcoal = $ENV{$env_app_key}
+        || File::Spec->catfile( $self->dir,
+        $self->{app_name} . '_local.' . $self->extension );
+    push @files, $app_lcoal if -e $app_lcoal;
 
-    if( $self->{prefix}) {
-        my $prefix_local = $ENV{ $env_prefix_key} || File::Spec->catfile( $self->dir ,  $self->{prefix} . '_' . $self->{app_name} . '_local.' . $self->extension );
-        push @files  , $prefix_local if -e $prefix_local;
+    if ( $self->{prefix} ) {
+        my $prefix_local = $ENV{$env_prefix_key} || File::Spec->catfile(
+            $self->dir,
+            $self->{prefix} . '_'
+                . $self->{app_name}
+                . '_local.'
+                . $self->extension
+        );
+        push @files, $prefix_local if -e $prefix_local;
     }
 
     return \@files;
 }
 
 sub _find_files {
-    my $self = shift;
-    my $path = $self->dir;
-    my $label = shift;
+    my $self      = shift;
+    my $path      = $self->dir;
+    my $label     = shift;
     my $extension = $self->extension;
 
     my @files;
-   my $dh = DirHandle->new( $path ) or croak "Could not Open " . $path ;
+    my $dh = DirHandle->new($path) or croak "Could not Open " . $path;
 
     while ( my $file = $dh->read() ) {
         next if $file =~ /local\.$extension$/;
-        if( $file =~ /^$label\.yml$/ || $file =~ /^$label\_(\w+)\.$extension$/ ) {
-            push @files , "$path/$file";
+        if (   $file =~ /^$label\.yml$/
+            || $file =~ /^$label\_(\w+)\.$extension$/ )
+        {
+            push @files, File::Spec->catfile( $path, $file );
         }
     }
 
     return \@files;
 }
-
 
 1;
 
@@ -106,7 +118,13 @@ Config::Multi - load multiple config files.
  my $dir = File::Spec->catfile( $FindBin::Bin , 'conf' );
 
  # prefix and extension is optional. 
- my $cm =  Config::Multi->new({dir => $dir , app_name => 'myapp' , prefix => 'web' , extension => 'yml' });
+ my $cm 
+        = Config::Multi->new({
+            dir => $dir , 
+            app_name    => 'myapp' , 
+            prefix      => 'web' , 
+            extension   => 'yml' 
+        });
  my $config = $cm->load();
  my $loaded_config_files = $cm->files;
 
@@ -120,8 +138,7 @@ I create this module because I want to load not only loading multiple config fil
 
 =head2 your configuration files
 
-  This is under your ~/myapp/conf/ and have sone yaml configuration in each files. you can specify the directory 
-  using dir option.
+This is under your ~/myapp/conf/ and have yaml configuration in each files.  you can specify the directory using dir option.
 
  .
  |-- env-prefix.yml
@@ -183,6 +200,7 @@ app config.
 =head2 $ENV setting
 
 instead of ${prefix}_${app_name}_local.yml , you can specify the path with $ENV{CONFIG_MULTI_PREFIX_MYAPP}
+
 instead of ${app_name}_local.yml , you can specify the path with $ENV{CONFIG_MULTI_MYAPP}
 
 note. PREFIX = uc($prefix); MYAPP = uc($app_name)

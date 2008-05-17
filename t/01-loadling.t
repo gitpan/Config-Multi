@@ -1,4 +1,3 @@
-use FindBin::libs;
 use Test::Base;
 use Config::Multi;
 use FindBin;
