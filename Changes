@@ -1,5 +1,8 @@
 Revision history for Config::Multi
 
+0.04    2008-05-18/19:20
+        - add Config::Any arguments. use_ext => 1.
+
 0.03    2008-05-17/23:07
         - fix 00-load.t
         - bug fix. 02-overwrite.t will pass all test now.

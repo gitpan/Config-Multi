@@ -10,7 +10,7 @@ use Carp;
 
 use base qw/Class::Accessor/;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 __PACKAGE__->mk_accessors(qw/app_name prefix dir files extension/);
 
@@ -24,7 +24,7 @@ sub load {
     my $config = {};
 
     my $app_files = $self->_find_files( $self->{app_name} );
-    my $app = Config::Any->load_files( { files => $app_files } );
+    my $app = Config::Any->load_files( { use_ext => 1, files => $app_files } );
     for ( @{$app} ) {
         my ( $filename, $data ) = %$_;
         push @files, $filename;
@@ -34,7 +34,7 @@ sub load {
     if ( $self->{prefix} ) {
         my $prefix_files
             = $self->_find_files( $self->{prefix} . '_' . $self->{app_name} );
-        my $prefix = Config::Any->load_files( { files => $prefix_files } );
+        my $prefix = Config::Any->load_files( { use_ext => 1, files => $prefix_files } );
         for ( @{$prefix} ) {
             my ( $filename, $data ) = %$_;
             push @files, $filename;
@@ -43,7 +43,7 @@ sub load {
     }
 
     my $local_files = $self->_local_files;
-    my $local = Config::Any->load_files( { files => $local_files } );
+    my $local = Config::Any->load_files( { use_ext => 1, files => $local_files } );
     my $local_config = {} ;
     for ( @{$local} ) {
         my ( $filename, $data ) = %$_;
@@ -249,6 +249,10 @@ L<Config::Any>
 =head1 AUTHOR
 
 Tomohiro Teranishi <tomohiro.teranishi@gmail.com>
+
+=head1 THANKS
+
+vkgtaro
 
 =head1 COPYRIGHT
 
