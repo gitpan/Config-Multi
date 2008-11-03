@@ -2,17 +2,17 @@ package Config::Multi;
 
 use strict;
 use warnings;
+use Carp;
+use Config::Any;
+use Data::Visitor::Encode;
 use DirHandle;
 use File::Spec;
-use FindBin;
-use Config::Any;
-use Carp;
-
+ 
 use base qw/Class::Accessor/;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
-__PACKAGE__->mk_accessors(qw/app_name prefix dir files extension/);
+__PACKAGE__->mk_accessors(qw/app_name prefix dir files extension unicode/);
 
 sub load {
     my $self  = shift;
@@ -57,6 +57,11 @@ sub load {
 
     $self->{files} = \@files;
 
+    if ( $self->unicode ) {
+        my $dve = Data::Visitor::Encode->new();
+        $config = $dve->decode('utf8', $config);
+    }
+
     return $config;
 }
 
@@ -68,10 +73,10 @@ sub _local_files {
         . uc( $self->{prefix} ) . '_'
         . uc( $self->{app_name} );
     my @files     = ();
-    my $app_lcoal = $ENV{$env_app_key}
+    my $app_local = $ENV{$env_app_key}
         || File::Spec->catfile( $self->dir,
         $self->{app_name} . '_local.' . $self->extension );
-    push @files, $app_lcoal if -e $app_lcoal;
+    push @files, $app_local if -e $app_local;
 
     if ( $self->{prefix} ) {
         my $prefix_local = $ENV{$env_prefix_key} || File::Spec->catfile(
@@ -98,7 +103,7 @@ sub _find_files {
 
     while ( my $file = $dh->read() ) {
         next if $file =~ /local\.$extension$/;
-        if (   $file =~ /^$label\.yml$/
+        if (   $file =~ /^$label\.$extension$/
             || $file =~ /^$label\_(\w+)\.$extension$/ )
         {
             push @files, File::Spec->catfile( $path, $file );
@@ -122,13 +127,14 @@ Config::Multi - load multiple config files.
  
  my $dir = File::Spec->catfile( $FindBin::Bin , 'conf' );
 
- # prefix and extension is optional. 
+ # prefix, extension and unicode is optional. 
  my $cm 
         = Config::Multi->new({
             dir => $dir , 
             app_name    => 'myapp' , 
             prefix      => 'web' , 
-            extension   => 'yml' 
+            extension   => 'yml' ,
+            unicode     => 1 # unicode option
         });
  my $config = $cm->load();
  my $loaded_config_files = $cm->files;
@@ -209,6 +215,10 @@ instead of ${prefix}_${app_name}_local.yml , you can specify the path with $ENV{
 instead of ${app_name}_local.yml , you can specify the path with $ENV{CONFIG_MULTI_MYAPP}
 
 note. PREFIX = uc($prefix); MYAPP = uc($app_name)
+
+=head2 unicode option
+
+if you set true to unicode option, return $config of flagged UTF-8.
 
 =head1 METHODS
 

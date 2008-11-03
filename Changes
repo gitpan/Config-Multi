@@ -1,5 +1,9 @@
 Revision history for Config::Multi
 
+0.05    2008-09-11/21:00
+        - add unicode option. unicode => 1.
+        - fix bug. remove hard coded extension 'yml' , use $extension valiable instead.
+
 0.04    2008-05-18/19:20
         - add Config::Any arguments. use_ext => 1.
 

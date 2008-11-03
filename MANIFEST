@@ -12,8 +12,8 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/Config/Multi.pm
 Makefile.PL
-MANIFEST
-META.yml			# Will be created by "make dist"
+MANIFEST			This list of files
+META.yml
 README
 t/00-load.t
 t/01-loadling.t
@@ -21,18 +21,23 @@ t/02-overwrite.t
 t/03-multi.t
 t/04-env.t
 t/05-no-prefix.t
+t/06-extension.t
+t/07-unicode-option.t
 t/boilerplate.t
 t/conf/env-prefix.yml
 t/conf/env.yml
 t/conf/myapp.yml
+t/conf/myapp_boin.yaml
 t/conf/myapp_boin.yml
 t/conf/myapp_local.yml
 t/conf/myapp_oppai.yml
 t/conf/never_load.yml
+t/conf/unicode.yml
+t/conf/unicode_hogera.yml
 t/conf/web_myapp.yml
 t/conf/web_myapp_cat.yml
 t/conf/web_myapp_dog.yml
 t/conf/web_myapp_local.yml
-t/pod-coverage.t
-t/pod.t
-t/spelling.t
+xt/pod-coverage.t
+xt/pod.t
+xt/spelling.t

@@ -28,3 +28,5 @@ jobqueue
 myapp
 yaml
 vkgtaro
+UTF
+unicode
