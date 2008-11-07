@@ -23,7 +23,8 @@ requires:
   Data::Visitor::Encode: 0
   DirHandle: 0
   Test::Base: 0
+  YAML: 0
   YAML::Syck: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.05
+version: 0.06

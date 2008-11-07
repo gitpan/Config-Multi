@@ -38,6 +38,3 @@ t/conf/web_myapp.yml
 t/conf/web_myapp_cat.yml
 t/conf/web_myapp_dog.yml
 t/conf/web_myapp_local.yml
-xt/pod-coverage.t
-xt/pod.t
-xt/spelling.t
