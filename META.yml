@@ -17,14 +17,14 @@ recommends:
   Test::Pod: 0
   Test::Pod::Coverage: 0
   Test::Spelling: 0
+  YAML: 0
+  YAML::Syck: 0
 requires:
   Class::Accessor: 0
   Config::Any: 0
   Data::Visitor::Encode: 0
   DirHandle: 0
   Test::Base: 0
-  YAML: 0
-  YAML::Syck: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.06
+version: 0.07

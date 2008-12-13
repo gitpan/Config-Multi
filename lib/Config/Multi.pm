@@ -10,7 +10,7 @@ use File::Spec;
  
 use base qw/Class::Accessor/;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 __PACKAGE__->mk_accessors(qw/app_name prefix dir files extension unicode/);
 

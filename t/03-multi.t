@@ -1,11 +1,17 @@
 use Test::Base;
+use Config::Any::YAML;
 use Config::Multi;
 use FindBin;
 use File::Spec;
 use File::Basename;
 use Data::Dumper;
 
-plan tests => 3 * blocks ;
+if ( !Config::Any::YAML->is_supported ) {
+    plan skip_all => 'YAML format not supported';
+}
+else {
+    plan tests => 3 * blocks ;
+}
 
 my $dir = File::Spec->catfile( $FindBin::Bin , 'conf' );
 
