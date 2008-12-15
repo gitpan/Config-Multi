@@ -6,11 +6,18 @@ use File::Spec;
 use File::Basename;
 use Data::Dumper;
 
-if ( !Config::Any::YAML->is_supported ) {
-    plan skip_all => 'YAML format not supported';
+sub is_supported_yaml {
+    eval { require YAML::Syck; YAML::Syck->VERSION( '0.70' ) };
+    return 1 unless $@;
+    eval { require YAML; };
+    return $@ ? 0 : 1;
+}
+
+if ( is_supported_yaml ) {
+    plan tests => 3 * blocks ;
 }
 else {
-    plan tests => 3 * blocks ;
+    plan skip_all => 'YAML format not supported';
 }
 
 my $dir = File::Spec->catfile( $FindBin::Bin , 'conf' );
