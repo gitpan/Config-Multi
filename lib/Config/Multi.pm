@@ -10,7 +10,7 @@ use File::Spec;
  
 use base qw/Class::Accessor/;
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 __PACKAGE__->mk_accessors(qw/app_name prefix dir files extension unicode/);
 
@@ -59,7 +59,7 @@ sub load {
 
     if ( $self->unicode ) {
         my $dve = Data::Visitor::Encode->new();
-        $config = $dve->decode('utf8', $config);
+        $config = $dve->decode_utf8($config);
     }
 
     return $config;
@@ -219,6 +219,8 @@ note. PREFIX = uc($prefix); MYAPP = uc($app_name)
 =head2 unicode option
 
 if you set true to unicode option, return $config of flagged UTF-8.
+in the future, this option will also be posiible to default.
+at least I would hope so.
 
 =head1 METHODS
 

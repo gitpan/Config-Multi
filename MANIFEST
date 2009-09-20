@@ -23,6 +23,7 @@ t/04-env.t
 t/05-no-prefix.t
 t/06-extension.t
 t/07-unicode-option.t
+t/08-unicode-option-with-yaml-syck.t
 t/boilerplate.t
 t/conf/env-prefix.yml
 t/conf/env.yml

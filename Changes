@@ -1,5 +1,8 @@
 Revision history for Config::Multi
 
+0.09    2009-09-20T17:44:52+09:00
+        - fixed bug, not die if $YAML::Syck::ImplicitUnicode is true.
+
 0.08    2008-12-15/14:34
         - not using Config::Any::YAML->is_supported for test.
 

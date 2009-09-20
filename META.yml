@@ -2,8 +2,12 @@
 abstract: 'load multiple config files.'
 author:
   - 'Tomohiro Teranishi <tomohiro.teranishi@gmail.com>'
+build_requires:
+  ExtUtils::MakeMaker: 6.42
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.77'
+generated_by: 'Module::Install version 0.87'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -13,6 +17,7 @@ no_index:
   directory:
     - inc
     - t
+    - xt
 recommends:
   Test::Pod: 0
   Test::Pod::Coverage: 0
@@ -27,4 +32,4 @@ requires:
   Test::Base: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.08
+version: 0.09
