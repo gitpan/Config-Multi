@@ -1,4 +1,7 @@
 Revision history for Config::Multi
+0.10    2009-10-05T18:02:00+09:00
+        - remove Data::Visitor::Encode code and using Unicode::RecursiveDowngrade instead 
+          because I do not want to have Any::Moose dependancy.
 
 0.09    2009-09-20T17:44:52+09:00
         - fixed bug, not die if $YAML::Syck::ImplicitUnicode is true.

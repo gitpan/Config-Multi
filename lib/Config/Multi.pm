@@ -4,13 +4,14 @@ use strict;
 use warnings;
 use Carp;
 use Config::Any;
-use Data::Visitor::Encode;
+use Unicode::RecursiveDowngrade;
+use Encode;
 use DirHandle;
 use File::Spec;
  
 use base qw/Class::Accessor/;
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 __PACKAGE__->mk_accessors(qw/app_name prefix dir files extension unicode/);
 
@@ -58,8 +59,9 @@ sub load {
     $self->{files} = \@files;
 
     if ( $self->unicode ) {
-        my $dve = Data::Visitor::Encode->new();
-        $config = $dve->decode_utf8($config);
+        my $rd = Unicode::RecursiveDowngrade->new;
+        $rd->filter(sub { Encode::decode('utf8',shift) });
+        $config = $rd->downgrade($config);
     }
 
     return $config;
