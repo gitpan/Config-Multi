@@ -1,4 +1,9 @@
 Revision history for Config::Multi
+
+0.11    2009-10-09T12:36:39+09:00
+        - fixed 08-unicode-option-with-yaml-syck.t.
+          is_supported_yaml_syck() returned false, if not supported YAML::Syck.
+
 0.10    2009-10-05T18:02:00+09:00
         - remove Data::Visitor::Encode code and using Unicode::RecursiveDowngrade instead 
           because I do not want to have Any::Moose dependancy.

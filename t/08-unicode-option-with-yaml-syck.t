@@ -9,7 +9,7 @@ use Data::Dumper;
 
 sub is_supported_yaml_syck {
     eval { require YAML::Syck; YAML::Syck->VERSION( '0.70' ) };
-    return 1 unless $@;
+    return $@ ? 0 : 1;
 }
 
 if ( is_supported_yaml_syck ) {
